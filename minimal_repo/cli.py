@@ -29,9 +29,9 @@ stream = client.build(path=".", tag=f"{IMAGE_NAME}:{LOCAL_CONTAINER_TAG}")
 log_stdout_stream(stream)
 
 for flow_name, flow in all_flows.items():
+    flow.result = LocalResult(dir="~/results")
     flow.run_config = DockerRun(
         image=f"{IMAGE_NAME}:{LOCAL_CONTAINER_TAG}",
         env={"PREFECT__FLOWS__CHECKPOINTING": "true"},
     )
-    flow.result = LocalResult(dir="~/results")
     flow.register(project_name=DEV_PROJECT, labels=[os.environ["SHARED_LABEL"]])
