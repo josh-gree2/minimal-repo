@@ -3,7 +3,6 @@ import logging
 import os
 import json
 
-from prefect.engine.results import LocalResult
 from prefect.run_configs import DockerRun
 
 from minimal_repo import all_flows
@@ -29,7 +28,6 @@ stream = client.build(path=".", tag=f"{IMAGE_NAME}:{LOCAL_CONTAINER_TAG}")
 log_stdout_stream(stream)
 
 for flow_name, flow in all_flows.items():
-    flow.result = LocalResult(dir="~/results")
     flow.run_config = DockerRun(
         image=f"{IMAGE_NAME}:{LOCAL_CONTAINER_TAG}",
         env={"PREFECT__FLOWS__CHECKPOINTING": "true"},
